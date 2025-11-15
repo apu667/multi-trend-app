@@ -29,25 +29,10 @@ const SignIn = ({ openSignIn, setOpenSignIn }) => {
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous error
-
     try {
       const res = await signIn(formData).unwrap();
-      if (res.success) {
-        console.log("Login success:", res);
-
-        // Save token to localStorage
-        localStorage.setItem("token", res.token);
-
-        // Close dialog
-        setOpenSignIn(false);
-
-        // Optional: Reset form
-        setFormData({ email: "", password: "" });
-        navigate("/dashboard")
-      }
+      console.log("Login success:", res);
     } catch (err) {
-      console.error(err);
       setError(err?.data?.message || "Something went wrong!");
     }
   };

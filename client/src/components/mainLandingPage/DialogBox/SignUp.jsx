@@ -33,7 +33,7 @@ const SignUp = ({ open, onChange }) => {
     const handleFormData = async (e) => {
         e.preventDefault();
         try {
-            const res = await signUp(formData).unwrap();
+             const res = await signIn(formData).unwrap(); // ✅ only string values
             if (res.success) {
                 console.log("Success:", res);
                 setError("");

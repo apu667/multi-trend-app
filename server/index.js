@@ -14,7 +14,11 @@ const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({
+    origin: "http://localhost:5173", // React app URL
+    credentials: true,               // ✅ cookie send করার জন্য
+}));
+
 app.use("/api/v1/auth", userRouter)
 app.use("/api/v1/vendor", vendorRouter)
 app.use("/api/v1/category", categoryRoutes)
