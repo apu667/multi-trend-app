@@ -14,12 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSignInMutation } from "@/app/features/mainUser";
 import { Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = ({ openSignIn, setOpenSignIn }) => {
   const [signIn] = useSignInMutation();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-
+  const navigate = useNavigate()
   // Handle form input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,16 +33,19 @@ const SignIn = ({ openSignIn, setOpenSignIn }) => {
 
     try {
       const res = await signIn(formData).unwrap();
-      console.log("Login success:", res);
+      if (res.success) {
+        console.log("Login success:", res);
 
-      // Save token to localStorage
-      localStorage.setItem("token", res.token);
+        // Save token to localStorage
+        localStorage.setItem("token", res.token);
 
-      // Close dialog
-      setOpenSignIn(false);
+        // Close dialog
+        setOpenSignIn(false);
 
-      // Optional: Reset form
-      setFormData({ email: "", password: "" });
+        // Optional: Reset form
+        setFormData({ email: "", password: "" });
+        navigate("/dashboard")
+      }
     } catch (err) {
       console.error(err);
       setError(err?.data?.message || "Something went wrong!");

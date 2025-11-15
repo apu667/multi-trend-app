@@ -14,8 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useSignUpMutation } from "@/app/features/mainUser";
 import { Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = ({ open, onChange }) => {
+    const navigate=useNavigate()
     const [signUp] = useSignUpMutation();
     const [formData, setFormData] = useState({
         name: "",
@@ -32,11 +34,13 @@ const SignUp = ({ open, onChange }) => {
         e.preventDefault();
         try {
             const res = await signUp(formData).unwrap();
-            console.log("Success:", res);
-            setError("");
-            onChange(false); // Close dialog
-           localStorage.setItem("token", res.token);
-
+            if (res.success) {
+                console.log("Success:", res);
+                setError("");
+                onChange(false); // Close dialog
+                localStorage.setItem("token", res.token);
+                navigate("/dashboard")
+            }
         } catch (err) {
             console.error(err);
             setError(err?.data?.message || "Something went wrong!");
